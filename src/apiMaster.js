@@ -1,14 +1,15 @@
 import axios from "axios";
 //require("dotenv").config();
-const url = "http://18.224.200.47";
-const pURL = 'http://ec2-34-202-182-39.compute-1.amazonaws.com';
-const qurl = 'http://ec2-3-129-7-246.us-east-2.compute.amazonaws.com';
+// Will need to update these IPs when app is deployed.
+const reviewsUrl = "http://ec2-IP_FOR_LOAD_BALANCER.compute-1.amazonaws.com";
+const productsUrl = 'http://ec2-34-202-182-39.compute-1.amazonaws.com';
+const questionsUrl = 'http://ec2-3-129-7-246.us-east-2.compute.amazonaws.com';
 
 const getProductList = () => {
   return axios({
     method: 'get',
     url: `/products`,
-    baseURL: pURL
+    baseURL: productsUrl
   });
 };
 
@@ -16,7 +17,7 @@ const getProductInfo = (id = 1) => {
   return axios({
     method: 'get',
     url: `/products/${id}`,
-    baseURL: pURL
+    baseURL: productsUrl
   });
 };
 
@@ -24,7 +25,7 @@ const getProductStyles = (id = 1) => {
   return axios({
     method: 'get',
     url: `/products/${id}/styles`,
-    baseURL: pURL
+    baseURL: productsUrl
   });
 };
 
@@ -32,26 +33,26 @@ const getRelatedProducts = (id = 1) => {
   return axios({
     method: 'get',
     url: `/products/${id}/related`,
-    baseURL: pURL
+    baseURL: productsUrl
   });
 };
 
 const getQA = (id = 1) => {
-  return axios.get(`${qurl}/qa/questions?product_id=${id}`);
+  return axios.get(`${questionsUrl}/qa/questions?product_id=${id}`);
 };
 
 const getReviewMetaData = (id = 1) => {
-  return axios.get(`${url}/reviews/${id}/meta`);
+  return axios.get(`${reviewsUrl}/reviews/${id}/meta`);
 };
 
 const getReviewsOfProduct = (id = 1, sortString = "relevant", count = 20) => {
   return axios.get(
-    `${url}/reviews/${id}/list?sort=${sortString}:asc&count=${count}}`
+    `${reviewsUrl}/reviews/${id}/list?sort=${sortString}:asc&count=${count}}`
   );
 };
 
 const reportReview = (reviewId) => {
-  return axios.put(`${url}/reviews/report/${reviewId}`);
+  return axios.put(`${reviewsUrl}/reviews/report/${reviewId}`);
 };
 
 const postReview = (
@@ -65,7 +66,7 @@ const postReview = (
   photos,
   characteristics
 ) => {
-  return axios.post(`${url}/reviews/${id}`, {
+  return axios.post(`${reviewsUrl}/reviews/${id}`, {
     rating: rating,
     summary: summary,
     body: body,
@@ -91,11 +92,11 @@ const addToCart = (user_token, sku_id) => {
 };
 
 const getSpecificAnswers = (questionId) => {
-  return axios.get(`${qurl}/qa/questions${questionId}/answers`);
+  return axios.get(`${questionsUrl}/qa/questions${questionId}/answers`);
 };
 
 const askQuestion = (id, text, name, email) => {
-  return axios.post(`${qUrl}/qa/questions`, {
+  return axios.post(`${questionsUrl}/qa/questions`, {
     body: text,
     name: name,
     email: email,
@@ -104,7 +105,7 @@ const askQuestion = (id, text, name, email) => {
 };
 
 const answerQuestion = (questionId, text, name, email, photos = []) => {
-  return axios.post(`${qUrl}/qa/questions/${questionId}/answers`, {
+  return axios.post(`${questionsUrl}/qa/questions/${questionId}/answers`, {
     body: text,
     name: name,
     email: email,
@@ -113,19 +114,19 @@ const answerQuestion = (questionId, text, name, email, photos = []) => {
 };
 
 const markQAsHelpful = (questionId) => {
-  return axios.put(`${qUrl}/qa/questions/${questionId}/helpful`);
+  return axios.put(`${questionsUrl}/qa/questions/${questionId}/helpful`);
 };
 
 const reportQuestion = (questionId) => {
-  return axios.put(`${qUrl}/qa/questions/${questionId}/report`);
+  return axios.put(`${questionsUrl}/qa/questions/${questionId}/report`);
 };
 
 const markAnsAsHelpful = (answerID) => {
-  return axios.put(`${qUrl}/qa/answers/${answerID}/helpful`);
+  return axios.put(`${questionsUrl}/qa/answers/${answerID}/helpful`);
 };
 
 const reportAns = (answerID) => {
-  return axios.put(`${qUrl}/qa/answers/${answerID}/report`);
+  return axios.put(`${questionsUrl}/qa/answers/${answerID}/report`);
 };
 
 const apiMaster = {
